@@ -1,0 +1,361 @@
+{% extends 'layout.html' %}
+{% block content %}
+{% load static %}
+<div id="content">
+    <section class="container">
+        <div class="row mt-4">
+            <div class="col-md-12 col-lg-10">
+                <div id="verticalTab">
+                    <div class="row no-gutters">
+                        <div class="col-md-3 my-0 my-md-4">
+                            <ul class="resp-tabs-list">
+                                <li><span><i class="fas fa-plane"></i></span> Flights</li>
+                                <li><span><i class="fas fa-bed"></i></span> Hotels</li>
+                            </ul>
+                        </div>
+                        <div class="col-md-9">
+                            <div class="resp-tabs-container bg-white shadow-md rounded h-100 p-3">
+                                <!-- Search Flights ============================================= -->
+                                <div>
+                                    <h2 class="font-weight-600 mb-4">Search Flights</h2>
+                                    <form id="bookingFlight" method="post" action="{% url 'requestSearch' %}">
+                                        {% csrf_token %}
+                                        <div class="mb-3">
+                                            <div class="custom-control custom-radio custom-control-inline">
+                                                <input id="oneway" name="flight-trip"
+                                                    class="custom-control-input tripType" checked="" required
+                                                    type="radio" value="1">
+                                                <label class="custom-control-label" for="oneway">One Way</label>
+                                            </div>
+                                            <div class="custom-control custom-radio custom-control-inline">
+                                                <input id="roundtrip" name="flight-trip"
+                                                    class="custom-control-input tripType" required type="radio"
+                                                    value="2">
+                                                <label class="custom-control-label" for="roundtrip">Round Trip</label>
+                                            </div>
+                                        </div>
+                                        <div class="form-row">
+                                            <div class="col-lg-6 form-group">
+                                                <label for="flightFrom">Leaving From</label>
+                                                <div class="position-relative">
+                                                    <input type="text" index="1"
+                                                        class="form-control rounded-right searchairport" id="flightFrom"
+                                                        name="flightFrom" required placeholder="Leaving From">
+                                                    <span class="icon-inside"><i
+                                                            class="fas fa-map-marker-alt"></i></span>
+                                                </div>
+                                            </div>
+                                            <div class="col-lg-6 form-group">
+                                                <label for="flightTo">Going To</label>
+                                                <div class="position-relative">
+                                                    <input type="text" index="2" class="form-control searchairport"
+                                                        id="flightTo" name="flightTo" required placeholder="Going To">
+                                                    <span class="icon-inside"><i
+                                                            class="fas fa-map-marker-alt"></i></span>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="form-row">
+                                            <div class="col-lg-6 form-group">
+                                                <label for="from">Depart On</label>
+                                                <div class="position-relative">
+                                                    <input id="from" name="flightDepart" type="text"
+                                                        class="form-control" required placeholder="Depart Date"
+                                                        value="{{currentdate}}" readonly style="background: #ffffff;">
+                                                    <span class="icon-inside"><i class="far fa-calendar-alt"></i></span>
+                                                </div>
+                                            </div>
+                                            <div class="col-lg-6 form-group">
+                                                <label for="to">Return On</label>
+                                                <div class="position-relative">
+                                                    <input id="to" name="flightReturn" type="text" class="form-control"
+                                                        placeholder="Return Date" readonly style="background: #ffffff;">
+                                                    <span class="icon-inside"><i class="far fa-calendar-alt"></i></span>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="travellers-class form-group">
+                                            <label for="flightTravellersClass">Travellers and Class</label>
+                                            <div class="position-relative">
+                                                <input type="text" id="flightTravellersClass"
+                                                    class="travellers-class-input form-control"
+                                                    name="flight-travellers-class" placeholder="Travellers, Class"
+                                                    readonly value="1 - Economy" required onkeypress="return false;">
+                                                <span class="icon-inside"><i class="fas fa-caret-down"></i></span>
+                                                <div class="travellers-dropdown">
+                                                    <div class="row align-items-center">
+                                                        <div class="col-sm-7">
+                                                            <p class="mb-sm-0">Adults <small class="text-muted">(12+
+                                                                    yrs)</small></p>
+                                                        </div>
+                                                        <div class="col-sm-5">
+                                                            <div class="qty input-group">
+                                                                <div class="input-group-prepend">
+                                                                    <button type="button" class="btn bg-light-4"
+                                                                        data-value="decrease"
+                                                                        data-target="#flightAdult-travellers"
+                                                                        data-toggle="spinner">-</button>
+                                                                </div>
+                                                                <input type="text" name="adult" data-ride="spinner"
+                                                                    id="flightAdult-travellers"
+                                                                    class="qty-spinner form-control" value="1" readonly>
+                                                                <div class="input-group-append">
+                                                                    <button type="button" class="btn bg-light-4"
+                                                                        data-value="increase"
+                                                                        data-target="#flightAdult-travellers"
+                                                                        data-toggle="spinner">+</button>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                    <hr class="my-2">
+                                                    <div class="row align-items-center">
+                                                        <div class="col-sm-7">
+                                                            <p class="mb-sm-0">Children <small class="text-muted">(2-12
+                                                                    yrs)</small></p>
+                                                        </div>
+                                                        <div class="col-sm-5">
+                                                            <div class="qty input-group">
+                                                                <div class="input-group-prepend">
+                                                                    <button type="button" class="btn bg-light-4"
+                                                                        data-value="decrease"
+                                                                        data-target="#flightChildren-travellers"
+                                                                        data-toggle="spinner">-</button>
+                                                                </div>
+                                                                <input type="text" name="child" data-ride="spinner"
+                                                                    id="flightChildren-travellers"
+                                                                    class="qty-spinner form-control" value="0" readonly>
+                                                                <div class="input-group-append">
+                                                                    <button type="button" class="btn bg-light-4"
+                                                                        data-value="increase"
+                                                                        data-target="#flightChildren-travellers"
+                                                                        data-toggle="spinner">+</button>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                    <hr class="my-2">
+                                                    <div class="row align-items-center">
+                                                        <div class="col-sm-7">
+                                                            <p class="mb-sm-0">Infants <small class="text-muted">(Below
+                                                                    2 yrs)</small></p>
+                                                        </div>
+                                                        <div class="col-sm-5">
+                                                            <div class="qty input-group">
+                                                                <div class="input-group-prepend">
+                                                                    <button type="button" class="btn bg-light-4"
+                                                                        data-value="decrease"
+                                                                        data-target="#flightInfants-travellers"
+                                                                        data-toggle="spinner">-</button>
+                                                                </div>
+                                                                <input type="text" name="infant" data-ride="spinner"
+                                                                    id="flightInfants-travellers"
+                                                                    class="qty-spinner form-control" value="0" readonly>
+                                                                <div class="input-group-append">
+                                                                    <button type="button" class="btn bg-light-4"
+                                                                        data-value="increase"
+                                                                        data-target="#flightInfants-travellers"
+                                                                        data-toggle="spinner">+</button>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                    <hr class="mt-2">
+                                                    <div class="mb-3">
+                                                        {% for class in FLIGHTCLASSES %}
+                                                        <div class="custom-control custom-radio">
+                                                            {% if class == 'Economy' %}
+                                                            <input id="{{class}}" name="flight-class"
+                                                                class="flight-class custom-control-input"
+                                                                value="{{class}}" checked="" required type="radio">
+                                                            <label class="custom-control-label"
+                                                                for="{{class}}">{{class}}</label>
+                                                            {% else %}
+                                                            <input id="{{class}}" name="flight-class"
+                                                                class="flight-class custom-control-input"
+                                                                value="{{class}}" required type="radio">
+                                                            <label class="custom-control-label"
+                                                                for="{{class}}">{{class}}</label>
+                                                            {% endif %}
+                                                        </div>
+                                                        {% endfor %}
+                                                    </div>
+                                                    <button class="btn btn-primary btn-block submit-done"
+                                                        type="button">Done</button>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <input value="{{strcurrentdate}}" type="hidden" id="strflightDepart"
+                                            name="strflightDepart">
+                                        <input type="hidden" id="strflightReturn" name="strflightReturn">
+                                        <input type="hidden" id="international" name="international">
+                                        <input type="hidden" id="airportcode_1" name="fromcode">
+                                        <input type="hidden" id="airportcode_2" name="tocode">
+                                        <button class="btn btn-primary btn-block" type="submit">Search Flights</button>
+                                    </form>
+                                </div>
+                                <!-- Search Flights end -->
+
+                                <!-- Search Hotels ============================================ -->
+                                <div>
+                                    <h2 class="font-weight-600">Search Hotels</h2>
+                                    <p class="lead mb-4">Over 500,000 hotels around the world</p>
+                                    <form id="bookingHotels" method="post">
+                                        <div class="form-row">
+                                            <div class="col-lg-12 form-group">
+                                                <label for="hotelsFrom">Where</label>
+                                                <div class="position-relative">
+                                                    <input type="text" class="form-control" id="hotelsFrom" required
+                                                        placeholder="Enter Locality, City">
+                                                    <span class="icon-inside"><i
+                                                            class="fas fa-map-marker-alt"></i></span>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="form-row">
+                                            <div class="col-lg-6 form-group">
+                                                <label for="hotelsCheckIn">Check In</label>
+                                                <div class="position-relative">
+                                                    <input id="hotelsCheckIn" type="text" class="form-control" required
+                                                        placeholder="Check In">
+                                                    <span class="icon-inside"><i class="far fa-calendar-alt"></i></span>
+                                                </div>
+                                            </div>
+                                            <div class="col-lg-6 form-group">
+                                                <label for="hotelsCheckOut">Check Out</label>
+                                                <div class="position-relative">
+                                                    <input id="hotelsCheckOut" type="text" class="form-control" required
+                                                        placeholder="Check Out">
+                                                    <span class="icon-inside"><i class="far fa-calendar-alt"></i></span>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="travellers-class form-group">
+                                            <label for="hotelsTravellersClass">Rooms / Travellers</label>
+                                            <div class="position-relative">
+                                                <input type="text" id="hotelsTravellersClass"
+                                                    class="travellers-class-input form-control"
+                                                    name="hotels-travellers-class" placeholder="Rooms / People" required
+                                                    onkeypress="return false;">
+                                                <span class="icon-inside"><i class="fas fa-caret-down"></i></span>
+                                                <div class="travellers-dropdown">
+                                                    <div class="row align-items-center">
+                                                        <div class="col-sm-7">
+                                                            <p class="mb-sm-0">Rooms</p>
+                                                        </div>
+                                                        <div class="col-sm-5">
+
+                                                            <div class="qty input-group">
+                                                                <div class="input-group-prepend">
+                                                                    <button type="button" class="btn bg-light-4"
+                                                                        data-value="decrease"
+                                                                        data-target="#hotels-rooms"
+                                                                        data-toggle="spinner">-</button>
+                                                                </div>
+                                                                <input type="text" data-ride="spinner" id="hotels-rooms"
+                                                                    class="qty-spinner form-control" value="1" min="40"
+                                                                    readonly>
+                                                                <div class="input-group-append">
+                                                                    <button type="button" class="btn bg-light-4"
+                                                                        data-value="increase"
+                                                                        data-target="#hotels-rooms"
+                                                                        data-toggle="spinner">+</button>
+                                                                </div>
+                                                            </div>
+
+                                                        </div>
+                                                    </div>
+                                                    <hr class="mt-2 mb-4">
+                                                    <div class="row align-items-center">
+                                                        <div class="col-sm-7">
+                                                            <p class="mb-sm-0">Adults <small class="text-muted">(12+
+                                                                    yrs)</small></p>
+                                                        </div>
+                                                        <div class="col-sm-5">
+
+                                                            <div class="qty input-group">
+                                                                <div class="input-group-prepend">
+                                                                    <button type="button" class="btn bg-light-4"
+                                                                        data-value="decrease"
+                                                                        data-target="#adult-travellers"
+                                                                        data-toggle="spinner">-</button>
+                                                                </div>
+                                                                <input type="text" data-ride="spinner"
+                                                                    id="adult-travellers"
+                                                                    class="qty-spinner form-control" value="1" readonly>
+                                                                <div class="input-group-append">
+                                                                    <button type="button" class="btn bg-light-4"
+                                                                        data-value="increase"
+                                                                        data-target="#adult-travellers"
+                                                                        data-toggle="spinner">+</button>
+                                                                </div>
+                                                            </div>
+
+
+                                                        </div>
+                                                    </div>
+                                                    <hr class="my-2">
+                                                    <div class="row align-items-center">
+                                                        <div class="col-sm-7">
+                                                            <p class="mb-sm-0">Children <small class="text-muted">(1-12
+                                                                    yrs)</small></p>
+                                                        </div>
+                                                        <div class="col-sm-5">
+
+                                                            <div class="qty input-group">
+                                                                <div class="input-group-prepend">
+                                                                    <button type="button" class="btn bg-light-4"
+                                                                        data-value="decrease"
+                                                                        data-target="#children-travellers"
+                                                                        data-toggle="spinner">-</button>
+                                                                </div>
+                                                                <input type="text" data-ride="spinner"
+                                                                    id="children-travellers"
+                                                                    class="qty-spinner form-control" value="0" readonly>
+                                                                <div class="input-group-append">
+                                                                    <button type="button" class="btn bg-light-4"
+                                                                        data-value="increase"
+                                                                        data-target="#children-travellers"
+                                                                        data-toggle="spinner">+</button>
+                                                                </div>
+                                                            </div>
+
+                                                        </div>
+                                                    </div>
+
+
+
+                                                    <button class="btn btn-primary btn-block submit-done mt-3"
+                                                        type="button">Done</button>
+                                                </div>
+                                            </div>
+                                        </div>
+
+                                        <button class="btn btn-primary btn-block" type="submit">Search Hotels</button>
+                                    </form>
+                                </div>
+                                <!-- Search Hotels end -->
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Banner
+      ============================================= -->
+            <div class="col-lg-2 mt-4 mt-lg-0">
+                <div class="row">
+                    <div class="col-6 col-lg-12 text-center"> <a href="#"><img
+                                src="{% static 'assets/images/slider/small-banner-9.jpg' %}" alt="" title=""
+                                class="img-fluid rounded shadow-md"></a> </div>
+                    <div class="col-6 col-lg-12 mt-lg-3 text-center"> <a href=""><img
+                                src="{% static 'assets/images/slider/small-banner-10.jpg' %}" alt="" title=""
+                                class="img-fluid rounded shadow-md"></a> </div>
+                </div>
+            </div>
+            <!-- Content end -->
+
+        </div>
+    </section>
+</div>
+{% endblock content %}

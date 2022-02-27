@@ -1,0 +1,37 @@
+{% extends 'layout.html' %}
+{% block content %}
+<h4>User List <a href="addnew">Add New</a></h4>
+{% if listData %}
+
+<table class="table" border="1">
+    <thead>
+      <tr>
+        <th scope="col">#</th>
+        <th scope="col">First</th>
+        <th scope="col">Last</th>
+        <th scope="col">Email</th>
+        <th scope="col">Action</th>
+      </tr>
+    </thead>
+    <tbody>
+        {% for value in listData %}
+      <tr>
+        <th scope="row">{{value.id}}</th>
+        <td>{{value.FirstName}}</td>
+        <td>{{value.LastName}}</td>
+        <td>{{value.uemail}}</td>
+        <td><a href="{% url 'editdata' value.id %}">Edit</a> | 
+            <form action="{% url 'deletedata' value.id %}" method="post">
+                {% csrf_token %}
+                <input type="submit" value="Delete">
+            </form>
+            </td>
+      </tr>
+      {% endfor %}
+    </tbody>
+  </table>
+
+{% else %}
+<h5>No Record Found</h5>
+{% endif %}
+{% endblock content %}

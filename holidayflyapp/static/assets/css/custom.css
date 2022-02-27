@@ -1,0 +1,173 @@
+/* ----------------------------------------------------------------
+	Custom CSS
+
+	Add all your Custom Styled CSS here for New Styles or
+	Overwriting Default Theme Styles for Better Hanlding Updates
+-----------------------------------------------------------------*/
+
+.ui-datepicker-prev span {
+    background-image: url('images/left-chevron.png') !important;
+    background-position: 0px 0px !important;
+}
+
+.ui-datepicker-next span {
+    background-image: url('images/right-chevron.png') !important;
+    background-position: 0px 0px !important;
+}
+
+#slider-range .ui-state-default {
+    border: 1px solid #c5c5c5;
+}
+
+.selectaddonsradio-toolbar-filter {
+    margin: 10px 0;
+}
+
+.selectaddonsradio-toolbar-filter input[type="checkbox"] {
+    opacity: 0;
+    position: fixed;
+    width: 0;
+}
+
+.fl-checkbox input {
+    width: 20px;
+    height: 20px;
+    margin-top: 0;
+    box-shadow: 0px 2px 5px #eee;
+    float: left;
+    margin-right: 8px;
+}
+
+.selectaddonsradio-toolbar-filter label {
+    display: inline-block;
+    background-color: #fff;
+    padding: 6px 0 1px;
+    font-size: 11px !important;
+    border: 2px solid #94A5A6;
+    border-radius: 9px;
+    cursor: pointer;
+    width: 23%;
+    text-align: center;
+    margin-right: 1px;
+    color: #94A5A6 !important;
+    line-height: 17px;
+    margin-bottom: 0;
+}
+
+.fl-checkbox label {
+    font-size: 14px;
+    font-weight: 500;
+    color: #807d7d;
+    margin-bottom: 10px;
+    vertical-align: middle;
+    padding-top: 2px;
+}
+
+.selectaddonsradio-toolbar-filter input[type="checkbox"]:checked+label {
+    background-color: #fff;
+    border-color: #3584bd;
+    color: #3584bd !important;
+}
+
+.selectaddonsradio-toolbar-filter label img.mm-second {
+    display: none;
+}
+
+.selectaddonsradio-toolbar-filter input[type="checkbox"]:checked+label img.mm-second {
+    display: inline-block;
+}
+
+.selectaddonsradio-toolbar-filter input[type="checkbox"]:checked+label img.mm-first {
+    display: none;
+}
+
+.flight-list .flight-item, .train-list .train-item, .bus-list .bus-item {
+    position: relative;
+    border-bottom: 8px solid #f1f2f3;
+}
+
+.MoreFareDiv {
+    border-top: 1px solid #c5c5c5;
+    border-bottom: 1px solid #c5c5c5;
+}
+
+.FlightdetailsDiv {}
+
+.crossIcons {
+    height: 22px;
+    margin-top: 9px;
+    float: right;
+    cursor: pointer;
+}
+
+.mar-to-tb {
+    margin-top: 16px;
+    margin-bottom: 6px;
+}
+
+.no-margn {
+    margin-left: 0;
+    margin-right: 0;
+}
+
+.bord-bot5 {
+    border-top: 1px solid #ccc;
+    padding-bottom: 8px;
+}
+
+.lvrbg {
+    border: 1px solid #ccc;
+    border-radius: 20px;
+    padding: 5px;
+    text-align: center;
+    font-size: 13px;
+    font-weight: 600;
+    background: #f7f7f7;
+}
+
+.txt-d1 {
+    color: #ec382f;
+}
+.desItem {
+    font-weight: 600;
+    font-size: 14px;
+}
+.frtbl_hd {
+    font-size: 13px;
+    font-weight: 700;
+    margin: 0;
+}
+.baggagerule table tr th, .baggagerule table tr td {
+    padding: 6px 13px;
+}
+.fareRuls table tr th, .baggagerule table tr th {
+    background: #f5f5f5;
+    font-weight: normal;
+    text-align: left;
+}
+.badgedanger{
+    background-color: #ec382f;
+    color: #fff;
+}
+.farefont{
+    font-weight: 600;
+}
+
+.table td, .table th {
+    padding: 0.4rem;
+    vertical-align: top;
+    border-top: 1px solid #dee2e6;
+}
+.FareRules_c p {
+    margin-top: 0;
+    margin-bottom: 0rem;
+}
+.FareRules_c ul li {
+    font-size: 11px;
+}
+
+@media (min-width: 992px) {
+    .col-md-5 {
+        width: 41.6667%;
+    }
+}

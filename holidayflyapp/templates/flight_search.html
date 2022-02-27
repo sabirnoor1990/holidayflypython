@@ -1,0 +1,906 @@
+{% extends 'layout.html' %}
+{% block content %}
+{% load static %}
+<section class="page-header page-header-text-light " style="padding: 0px;">
+
+</section>
+<input type="hidden" value="{{TraceId}}" id="TraceId">
+<div id="content" ng-app="AppHolidayfly" ng-controller="holidayflyCtrl">
+    <section class="container">
+        <div class="row">
+            <div class="col mb-2">
+                <form id="bookingFlight" method="post" action="{% url 'requestSearch' %}">
+                    {% csrf_token %}
+                    <div class="mb-3">
+                        <div class="custom-control custom-radio custom-control-inline">
+                            <input id="oneway" name="flight-trip" class="custom-control-input tripType" checked=""
+                                required type="radio" value="1">
+                            <label class="custom-control-label" for="oneway">One Way</label>
+                        </div>
+                        <div class="custom-control custom-radio custom-control-inline">
+                            <input id="roundtrip" name="flight-trip" class="custom-control-input tripType" required
+                                type="radio" value="2">
+                            <label class="custom-control-label" for="roundtrip">Round Trip</label>
+                        </div>
+                    </div>
+                    <div class="form-row">
+                        <div class="col-md-4 col-lg-2 form-group">
+                            <input type="text" index="1" class="form-control rounded-right searchairport"
+                                id="flightFrom" name="flightFrom" required value="{{SearchData.leaving}}"
+                                placeholder="Leaving From">
+                            <span class="icon-inside"><i class="fas fa-map-marker-alt"></i></span>
+                        </div>
+                        <div class="col-md-4 col-lg-2 form-group">
+                            <input type="text" index="2" class="form-control searchairport" id="flightTo"
+                                name="flightTo" required value="{{SearchData.going}}" placeholder="Going To">
+                            <span class="icon-inside"><i class="fas fa-map-marker-alt"></i></span>
+                        </div>
+                        <div class="col-md-4 col-lg-2 form-group">
+                            <input id="from" name="flightDepart" type="text" class="form-control" required
+                                placeholder="Depart Date" value="{{SearchData.departure}}" readonly
+                                style="background: #ffffff;">
+                            <span class="icon-inside"><i class="far fa-calendar-alt"></i></span>
+                        </div>
+                        <div class="col-md-4 col-lg-2 form-group">
+                            <input id="to" name="flightReturn" type="text" class="form-control"
+                                placeholder="Return Date" value="{{SearchData.return}}" readonly
+                                style="background: #ffffff;">
+                            <span class="icon-inside"><i class="far fa-calendar-alt"></i></span>
+                        </div>
+                        <div class="col-md-4 col-lg-2 travellers-class form-group">
+                            <input type="text" id="flightTravellersClass" class="travellers-class-input form-control"
+                                name="flight-travellers-class" value="{{TotalPax}} - {{SearchData.classes}}"
+                                placeholder="Travellers, Class" readonly required onkeypress="return false;">
+                            <span class="icon-inside"><i class="fas fa-caret-down"></i></span>
+                            <div class="travellers-dropdown">
+                                <div class="row align-items-center">
+                                    <div class="col-sm-7">
+                                        <p class="mb-sm-0">Adults <small class="text-muted">(12+ yrs)</small></p>
+                                    </div>
+                                    <div class="col-sm-5">
+                                        <div class="qty input-group">
+                                            <div class="input-group-prepend">
+                                                <button type="button" class="btn bg-light-4" data-value="decrease"
+                                                    data-target="#flightAdult-travellers"
+                                                    data-toggle="spinner">-</button>
+                                            </div>
+                                            <input type="text" name="adult" data-ride="spinner"
+                                                id="flightAdult-travellers" class="qty-spinner form-control"
+                                                value="{{SearchData.Adults}}" readonly>
+                                            <div class="input-group-append">
+                                                <button type="button" class="btn bg-light-4" data-value="increase"
+                                                    data-target="#flightAdult-travellers"
+                                                    data-toggle="spinner">+</button>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <hr class="my-2">
+                                <div class="row align-items-center">
+                                    <div class="col-sm-7">
+                                        <p class="mb-sm-0">Children <small class="text-muted">(2-12 yrs)</small></p>
+                                    </div>
+                                    <div class="col-sm-5">
+                                        <div class="qty input-group">
+                                            <div class="input-group-prepend">
+                                                <button type="button" class="btn bg-light-4" data-value="decrease"
+                                                    data-target="#flightChildren-travellers"
+                                                    data-toggle="spinner">-</button>
+                                            </div>
+                                            <input type="text" name="child" data-ride="spinner"
+                                                id="flightChildren-travellers" class="qty-spinner form-control"
+                                                value="{{SearchData.Childs}}" readonly>
+                                            <div class="input-group-append">
+                                                <button type="button" class="btn bg-light-4" data-value="increase"
+                                                    data-target="#flightChildren-travellers"
+                                                    data-toggle="spinner">+</button>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <hr class="my-2">
+                                <div class="row align-items-center">
+                                    <div class="col-sm-7">
+                                        <p class="mb-sm-0">Infants <small class="text-muted">(Below 2 yrs)</small></p>
+                                    </div>
+                                    <div class="col-sm-5">
+                                        <div class="qty input-group">
+                                            <div class="input-group-prepend">
+                                                <button type="button" class="btn bg-light-4" data-value="decrease"
+                                                    data-target="#flightInfants-travellers"
+                                                    data-toggle="spinner">-</button>
+                                            </div>
+                                            <input type="text" name="infant" data-ride="spinner"
+                                                id="flightInfants-travellers" class="qty-spinner form-control"
+                                                value="{{SearchData.Infants}}" readonly>
+                                            <div class="input-group-append">
+                                                <button type="button" class="btn bg-light-4" data-value="increase"
+                                                    data-target="#flightInfants-travellers"
+                                                    data-toggle="spinner">+</button>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <hr class="mt-2">
+                                <div class="mb-3">
+                                    {% for class in FLIGHTCLASSES %}
+                                    <div class="custom-control custom-radio">
+                                        {% if class == SearchData.classes %}
+                                        <input id="{{class}}" name="flight-class"
+                                            class="flight-class custom-control-input" value="{{class}}" checked=""
+                                            required type="radio">
+                                        {% else %}
+                                        <input id="{{class}}" name="flight-class"
+                                            class="flight-class custom-control-input" value="{{class}}" required
+                                            type="radio">
+                                        {% endif %}
+                                        <label class="custom-control-label" for="{{class}}">{{class}}</label>
+                                    </div>
+                                    {% endfor %}
+                                </div>
+                                <input value="{{SearchData.strflightDepart}}" type="hidden" id="strflightDepart"
+                                    name="strflightDepart">
+                                <input value="{{SearchData.strflightReturn}}" type="hidden" id="strflightReturn"
+                                    name="strflightReturn">
+                                <input value="{{SearchData.international}}" type="hidden" id="international"
+                                    name="international">
+                                <input value="{{SearchData.fromcode}}" type="hidden" id="airportcode_1" name="fromcode">
+                                <input value="{{SearchData.tocode}}" type="hidden" id="airportcode_2" name="tocode">
+                                <button class="btn btn-primary btn-block submit-done" type="button">Done</button>
+                            </div>
+                        </div>
+                        <div class="col-md-4 col-lg-2 form-group">
+                            <button class="btn btn-primary btn-block" type="submit">Search</button>
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>
+        <div class="row">
+            <aside class="col-md-3">
+                <div class="bg-white shadow-md rounded p-3">
+                    <h3 class="text-5">Filter</h3>
+                    <hr class="mx-n3">
+
+                    <div class="accordion accordion-alternate style-2 mt-n3" id="toggleAlternate">
+                        <div class="card">
+                            <div class="card-header" id="price">
+                                <h5 class="mb-0"> <a href="#" class="collapse" data-toggle="collapse"
+                                        data-target="#togglePrice" aria-expanded="true"
+                                        aria-controls="togglePrice">Search</a> </h5>
+                            </div>
+                            <div id="togglePrice" class="collapse show" aria-labelledby="price">
+                                <div class="card-body">
+                                    <input type="text" class="form-control" ng-model="searchText"
+                                        placeholder="Type here" style="padding: 6px 7px !important;">
+                                </div>
+                            </div>
+                        </div>
+                        <div class="card">
+                            <div class="card-header" id="price">
+                                <h5 class="mb-0"> <a href="#" class="collapse" data-toggle="collapse"
+                                        data-target="#togglePrice" aria-expanded="true"
+                                        aria-controls="togglePrice">Price</a> </h5>
+                            </div>
+                            <div id="togglePrice" class="collapse show" aria-labelledby="price">
+                                <div class="card-body">
+                                    <p>
+                                        <input id="amount" type="text" readonly
+                                            class="form-control border-0 bg-transparent p-0">
+                                        <input id="hiddenamount" type="hidden" readonly
+                                            class="form-control border-0 bg-transparent p-0">
+                                    </p>
+                                    <div id="slider-range"></div>
+                                </div>
+                            </div>
+                        </div>
+                        {% verbatim %}
+                        <div class="card">
+                            <div class="card-header" id="stops">
+                                <h5 class="mb-0"> <a href="#" data-toggle="collapse" data-target="#togglestops"
+                                        aria-expanded="true" aria-controls="togglestops">No. of Stops</a> </h5>
+                            </div>
+                            <div id="togglestops" class="collapse show" aria-labelledby="stops">
+                                <div class="card-body" ng-init="filter['StopCount']={}">
+                                    <div class="custom-control custom-checkbox"
+                                        ng-repeat="value in getItems('StopCount', flightlistOutbound) | orderBy:StopCount:reverse">
+                                        <input type="checkbox" id="{{value}}" ng-model="filter['StopCount'][value]"
+                                            ng-model="value" class="custom-control-input">
+                                        <label class="custom-control-label" for="{{value}}">{{value}}</label>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        {% endverbatim %}
+                        <div class="card">
+                            <div class="card-header" id="departureTime">
+                                <h5 class="mb-0"> <a href="#" class="collapse" data-toggle="collapse"
+                                        data-target="#toggleDepartureTime" aria-expanded="true"
+                                        aria-controls="toggleDepartureTime">Departure from {{SearchData.fromcode}}</a>
+                                </h5>
+                            </div>
+                            <div id="toggleDepartureTime" class="collapse show" aria-labelledby="departureTime">
+                                <div class="card-body">
+                                    <div class="selectaddonsradio-toolbar-filter"
+                                        ng-init="filter['FilterDepartureDtTime']={}">
+
+                                        <input type="checkbox" id="morning" class="filter-times checkboxdba"
+                                            ng-model="filter['FilterDepartureDtTime']['00:00-10:00']"
+                                            ng-model="00:00-10:00">
+                                        <label for="morning"><img src="{% static '/assets/images/grey_cloud.svg' %}"
+                                                class="mm-first"> <img src="{% static '/assets/images/cloud.svg' %}"
+                                                class="mm-second"> <br> 00 - 10 </label>
+
+                                        <input type="checkbox" id="afternoon" class="filter-times checkboxdba"
+                                            ng-model="filter['FilterDepartureDtTime']['10:00-15:00']"
+                                            ng-model="10:00-15:00">
+                                        <label for="afternoon"><img src="{% static 'assets/images/sun.svg' %}"
+                                                class="mm-first"><img src="{% static 'assets/images/sun_red.svg' %}"
+                                                class="mm-second"> <br> 10 - 15</label>
+
+                                        <input type="checkbox" id="evening" class="filter-times checkboxdba"
+                                            ng-model="filter['FilterDepartureDtTime']['15:00-20:00']"
+                                            ng-model="15:00-20:00">
+                                        <label for="evening"><img src="{% static 'assets/images/cloud_grey.svg' %}"
+                                                class="mm-first"> <img src="{% static 'assets/images/cloud_red.svg' %}"
+                                                class="mm-second"> <br> 15 - 20</label>
+
+                                        <input type="checkbox" id="night" class="filter-times checkboxdba"
+                                            ng-model="filter['FilterDepartureDtTime']['20:00-23:59']"
+                                            ng-model="20:00-23:59">
+                                        <label for="night"><img src="{% static 'assets/images/sleep.svg' %}"
+                                                class="mm-first"> <img src="{% static 'assets/images/sleepred.svg' %}"
+                                                class="mm-second"> <br> 20 - 00</label>
+                                    </div>
+
+                                </div>
+                            </div>
+                        </div>
+                        <div class="card">
+                            <div class="card-header" id="departureTime">
+                                <h5 class="mb-0"> <a href="#" class="collapse" data-toggle="collapse"
+                                        data-target="#toggleDepartureTime1" aria-expanded="true"
+                                        aria-controls="toggleDepartureTime1">Arrival at {{SearchData.tocode}}</a> </h5>
+                            </div>
+                            <div id="toggleDepartureTime1" class="collapse show" aria-labelledby="departureTime">
+                                <div class="card-body">
+                                    <div class="selectaddonsradio-toolbar-filter"
+                                        ng-init="filter['FilterArrivalDtTime']={}">
+
+                                        <input type="checkbox" id="morning1" class="filter-times checkboxdba"
+                                            ng-model="filter['FilterArrivalDtTime']['00:00-10:00']"
+                                            ng-model="00:00-10:00">
+                                        <label for="morning1"><img src="{% static '/assets/images/grey_cloud.svg' %}"
+                                                class="mm-first"> <img src="{% static '/assets/images/cloud.svg' %}"
+                                                class="mm-second"> <br> 00 - 10 </label>
+
+                                        <input type="checkbox" id="afternoon1" class="filter-times checkboxdba"
+                                            ng-model="filter['FilterArrivalDtTime']['10:00-15:00']"
+                                            ng-model="10:00-15:00">
+                                        <label for="afternoon1"><img src="{% static 'assets/images/sun.svg' %}"
+                                                class="mm-first"><img src="{% static 'assets/images/sun_red.svg' %}"
+                                                class="mm-second"> <br> 10 - 15</label>
+
+                                        <input type="checkbox" id="evening1" class="filter-times checkboxdba"
+                                            ng-model="filter['FilterArrivalDtTime']['15:00-20:00']"
+                                            ng-model="15:00-20:00">
+                                        <label for="evening1"><img src="{% static 'assets/images/cloud_grey.svg' %}"
+                                                class="mm-first"> <img src="{% static 'assets/images/cloud_red.svg' %}"
+                                                class="mm-second"> <br> 15 - 20</label>
+
+                                        <input type="checkbox" id="night1" class="filter-times checkboxdba"
+                                            ng-model="filter['FilterArrivalDtTime']['20:00-23:59']"
+                                            ng-model="20:00-23:59">
+                                        <label for="night1"><img src="{% static 'assets/images/sleep.svg' %}"
+                                                class="mm-first"> <img src="{% static 'assets/images/sleepred.svg' %}"
+                                                class="mm-second"> <br> 20 - 00</label>
+                                    </div>
+
+                                </div>
+                            </div>
+                        </div>
+
+                        {% verbatim %}
+                        <div class="card">
+                            <div class="card-header" id="airlines">
+                                <h5 class="mb-0"> <a href="#" class="collapse" data-toggle="collapse"
+                                        data-target="#toggleAirlines" aria-expanded="true"
+                                        aria-controls="toggleAirlines">Airlines</a> </h5>
+                            </div>
+                            <div id="toggleAirlines" class="collapse show" aria-labelledby="airlines">
+                                <div class="card-body" ng-init="filter['AirlineName']={}">
+                                    <div class="custom-control custom-checkbox"
+                                        ng-repeat="value in getItems('AirlineName', flightlistOutbound) | orderBy:AirlineName:reverse">
+                                        <input type="checkbox" id="{{value}}" class="custom-control-input"
+                                            ng-model="filter['AirlineName'][value]" ng-model="value">
+                                        <label class="custom-control-label" for="{{value}}">{{value}}</label>
+                                    </div>
+
+                                </div>
+                                <!-- <div class="card-body">
+                                    <div class="custom-control custom-checkbox" ng-repeat="(key, value) in FiltAirline">
+                                        <input type="checkbox" id="{{value}}"
+                                            class="custom-control-input" value="{{value}}" ng-model="value" >
+                                        <label class="custom-control-label" for="{{value}}">{{value}}</label>
+                                    </div>
+                                    
+                                </div> -->
+                            </div>
+                        </div>
+                        {% endverbatim %}
+                    </div>
+
+                </div>
+            </aside>
+            <div class="col-md-9 mt-4 mt-md-0">
+                <div class="bg-white shadow-md rounded py-4">
+                    <div class="mx-3 mb-3 text-center">
+                        <h2 class="text-6 mb-4">{{SearchData.leaving}} <small class="mx-2">to</small>{{SearchData.going}}</h2>
+                    </div>
+                    <div class="text-1 bg-light-3 border border-right-0 border-left-0 py-2 px-3">
+                        <div class="row">
+                            <div class="col col-sm-2 text-center"><span class="d-none d-sm-block">Airline</span></div>
+                            <div class="col col-sm-2 text-center">Departure</div>
+                            <div class="col-sm-2 text-center d-none d-sm-block">Duration</div>
+                            <div class="col col-sm-2 text-center">Arrival</div>
+                            <div class="col col-sm-2 text-right">Price</div>
+                        </div>
+                    </div>
+                    {% verbatim %}
+                    <div class="flight-list" ng-if="loadingFlight == false"
+                        ng-repeat="(index, item) in filtered = (flightlistOutbound | filter:filterByFlightMatching | filter:searchText | orderBy:PublishedFare:reverse | limitTo:limit)">
+                        <div class="flight-item">
+                            <div class="row align-items-center flex-row pt-4 pb-2 px-3">
+                                <div class="col col-sm-2 text-center d-lg-flex company-info">
+                                    <span class="align-middle">
+                                        <img class="img-fluid flightLogo" src="{{item.logo}}"
+                                            title="{{item.AirlineName}}" alt="{{item.AirlineName}}">
+                                    </span>
+                                    <span class="align-middle ml-lg-2">
+                                        <span class="d-block text-1 text-dark">{{item.AirlineName}}</span>
+                                        <small class="text-muted d-block">{{item.FlightNumber}}</small>
+                                    </span>
+                                </div>
+                                <div class="col col-sm-2 text-center time-info"> <span
+                                        class="text-4 timeColor">{{item.DepartureTime}}</span>
+                                    <small class="text-muted d-none d-sm-block">{{item.strSoCity}}</small>
+                                </div>
+                                <div class="col-sm-2 text-center d-none d-sm-block time-info"> <span
+                                        class="text-3 timeColor">{{item.FlightDuration}}</span>
+                                    <small class="text-muted d-none d-sm-block">{{item.StopCount}}</small>
+                                </div>
+                                <div class="col col-sm-2 text-center time-info"> <span
+                                        class="text-4 timeColor">{{item.ArrivalTime}}</span>
+                                    <small class="text-muted d-none d-sm-block">{{item.strDeCity}}</small>
+                                </div>
+                                <div class="col col-sm-2 text-right text-dark text-6 price">
+                                    <small class="text-muted"
+                                        style="font-size: 13px;">{{item.FairRules[0].Currency}}</small>
+                                    {{item.PublishedFareTxt}}
+                                    <div class="text-muted text-1 text-right" ng-show="item.FairRules.length > 1"><a href="javascript:void(0)"
+                                            ng-click="MoreFare(item,index)">+ More
+                                            Fare</a></div>
+                                            <span class="text-1 text-danger d-block">{{item.NoOfSeatAvailable}} seat(s) left</span>
+                                </div>
+
+                                <div class="col-12 col-sm-2 text-center ml-auto btn-book">
+                                    <a href="booking-flights-confirm-details.html" class="btn btn-sm btn-primary"
+                                        style="padding: 0.2rem 1rem;"><i
+                                            class="fas fa-shopping-cart d-block d-lg-none"></i>
+                                        <span class="d-none d-lg-block">Book Now</span></a>
+                                </div>
+                                <div class="col col-sm-auto col-lg-5 ml-auto mt-1 text-1 text-left">
+                                    <a href="javascript:void(0)" ng-if="item.GroundTime > 0">Layover at {{item.LAYOVERCity}}
+                                        {{item.LAYOVERDuration}}</a>
+                                </div>
+                                <div class="col col-sm-auto col-lg-5 ml-auto mt-1 text-1 text-center">
+                                    <a href="javascript:void(0)" style="color: green;">{{item.IsRefundableTxt}}</a>
+                                </div>
+                                <div class="col col-sm-auto col-lg-2 ml-auto mt-1 text-1 text-center">
+                                    <a href="javascript:void(0)" ng-click="FlightDetails(item,index)">Flight Details</a>
+                                </div>
+                            </div>
+
+                            <div class="modal-body MoreFareDiv" style="display: none;" id="MoreFareDiv_{{index}}">
+                                <div class="flight-details">
+                                    <div class="row mb-4" ng-repeat="(key, value) in item.FairRules">
+                                        <div class="col-12 col-sm-9 col-lg-8">
+                                            <div class="row align-items-center trip-title mb-3">
+                                                <div class="col col-sm-auto text-center text-sm-left">
+                                                    <h5 class="m-0 trip-place">{{value.fareIdentifier}}</h5>
+                                                </div>
+                                                <div class="col-auto text-10 text-black-50 text-center trip-arrow">➝
+                                                </div>
+                                                <div class="col col-sm-auto text-center text-sm-left">
+                                                    <h5 class="m-0 trip-place">{{value.FareClass}}</h5>
+                                                </div>
+                                            </div>
+                                            <div class="row align-items-center">
+                                                <div class="col col-sm-auto" ng-if="value.IsBaggage==true"><span
+                                                        class="text-2 text-success"><i class="fas fa-check"></i>
+                                                        Check-In baggage included</span>
+                                                </div>
+                                                <div class="col col-sm-auto" ng-if="value.IsCabinBaggage==true"><span
+                                                        class="text-2 text-success"><i class="fas fa-check"></i> Cabin
+                                                        baggage included</span>
+                                                </div>
+                                                <div class="col col-sm-auto" ng-if="value.IsMealIncludes==true"><span
+                                                        class="text-2 text-success"><i class="fas fa-check"></i> Meal
+                                                        Included</span>
+                                                </div>
+                                                <div class="col col-sm-auto" ng-if="value.IsMealIncludes==false"><span
+                                                        class="text-2 text-danger"><i class="fas fa-check"></i> Meal Not
+                                                        Included</span>
+                                                </div>
+                                                <div class="col-auto">
+                                                    <span class="badge badge-success py-1 px-2 font-weight-normal text-1" ng-class="{badgedanger: value.Refundable==2 }">{{value.IsRefundableTxt}}</span>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="col-12 col-sm-3 col-lg-2 text-center text-sm-right mt-3 mt-sm-0">
+                                            <span class="text-dark text-5">{{value.Currency}} {{value.PublishedFare}}
+                                            </span> <span class="text-1 text-muted d-block"><a href="javascript:void(0)"
+                                                ng-click="Fare_Details(value,index)">Fare Details</a></span> <span
+                                                class="text-1 text-danger d-block">{{value.SeatAvailable}} seat(s)
+                                                left</span>
+                                        </div>
+                                        <div class="col-12 col-sm-3 col-lg-2 text-right ml-auto btn-book"> <a
+                                                href="booking-flights-confirm-details.html"
+                                                class="btn btn-sm btn-primary"><i
+                                                    class="fas fa-shopping-cart d-block d-lg-none"></i> <span
+                                                    class="d-none d-lg-block">Book</span></a> </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="modal-body FlightdetailsDiv" style="display: none;"
+                                id="FlightdetailsDiv_{{index}}">
+                                <div class="flight-details">
+                                    <ul class="nav nav-tabs" id="myTab" role="tablist">
+                                        <li class="nav-item"> <a class="nav-link active" id="first-tab_{{index}}"
+                                                data-toggle="tab" href="#first_{{index}}" role="tab"
+                                                aria-controls="first" aria-selected="true">Itinerary</a>
+                                        </li>
+                                        <li class="nav-item"> <a class="nav-link" id="second-tab_{{index}}"
+                                                data-toggle="tab" href="#second_{{index}}" role="tab"
+                                                aria-controls="second" aria-selected="false">Fare
+                                                Details</a> </li>
+                                        <li class="nav-item"> <a class="nav-link" id="third-tab_{{index}}"
+                                                data-toggle="tab" href="#third_{{index}}" role="tab"
+                                                aria-controls="third" aria-selected="false">Baggage
+                                                Details</a> </li>
+                                        <li class="nav-item"> <a class="nav-link" id="fourth-tab_{{index}}"
+                                                data-toggle="tab" href="#fourth_{{index}}" role="tab"
+                                                aria-controls="fourth" aria-selected="false" ng-click="FarerulesCancellation(item,PriceIdsss)">Fare Rules & Cancellation
+                                                Fee</a> </li>
+                                        <li class="nav-item" style="width: 100%;">
+                                            <div><img src="/static/assets/images/close1.png" class="crossIcons"
+                                                    ng-click="crossIcons(index)" /></div>
+                                        </li>
+                                    </ul>
+                                    <div class="tab-content my-3" id="myTabContent">
+                                        <div class="tab-pane fade show active" id="first_{{index}}" role="tabpanel"
+                                            aria-labelledby="first-tab_{{index}}">
+                                            <div class="row flex-row pt-4 px-md-4"
+                                                ng-repeat="(key, value) in item.Segments">
+                                                <div class="col-12 col-sm-3 text-center d-lg-flex company-info">
+                                                    <span class="align-middle"><img class="img-fluid flightLogo"
+                                                            alt="{{value.AirlineName}}" src="{{value.filePath}}"
+                                                            title="{{value.AirlineName}}"> </span>
+                                                    <span class="align-middle ml-lg-2">
+                                                        <span
+                                                            class="d-block text-1 text-dark">{{value.AirlineName}}</span>
+                                                        <small
+                                                            class="text-muted d-block">{{value.SegFlightNumber}}</small>
+                                                    </span>
+                                                </div>
+                                                <div class="col-12 col-sm-3 text-center time-info mt-3 mt-sm-0">
+                                                    <span class="text-5 text-dark">{{value.strDepartureDtTime}}</span>
+                                                    <small class="text-muted d-block"><span
+                                                            class="desItem">{{value.originCityName}}
+                                                            ({{value.originAirportCode}})</span>,
+                                                        {{value.originCountryName}}</small>
+                                                    <small class="text-muted d-block"
+                                                        style="font-size: 13px;">{{value.originDepTime | date :
+                                                        "EEE-dd"}} {{value.originDepTime | date : "MMM yyyy"}} </small>
+                                                    <small class="text-muted d-block"
+                                                        style="font-size: 13px;">{{value.DepTerminal}} </small>
+                                                </div>
+                                                <div class="col-12 col-sm-3 text-center time-info mt-3 mt-sm-0"> <span
+                                                        class="text-3 text-dark">{{value.FlightDuration}}</span> <small
+                                                        class="text-muted d-block">Duration</small> </div>
+                                                <div class="col-12 col-sm-3 text-center time-info mt-3 mt-sm-0"> <span
+                                                        class="text-5 text-dark">{{value.strArrivalDtTime}}</span>
+                                                    <small class="text-muted d-block"><span
+                                                            class="desItem">{{value.destinationCityName}}
+                                                            ({{value.destinationAirportCode}})</span>,
+                                                        {{value.destinationCountryName}}</small>
+                                                    <small class="text-muted d-block"
+                                                        style="font-size: 13px;">{{value.destinationArrTime | date :
+                                                        "EEE-dd"}} {{value.destinationArrTime | date : "MMM yyyy"}}
+                                                    </small>
+                                                    <small class="text-muted d-block"
+                                                        style="font-size: 13px;">{{value.ArrTerminal}} </small>
+                                                </div>
+                                                <div class="row col-12 no-margn mar-to-tb" ng-if="value.GroundTime > 0">
+                                                    <div class="col-md-5 col-sm-5 bord-bot5 " style="margin-top:17px;">
+                                                    </div>
+                                                    <div class="col-md-2 col-sm-2 fnt15 lvrbg ">
+                                                        LAYOVER: <span class="txt-d1">{{value.LAYOVERDuration}}</span>
+                                                    </div>
+                                                    <div class="col-md-5 col-sm-5 bord-bot5" style="margin-top:17px;">
+                                                    </div>
+                                                </div>
+                                            </div>
+
+                                        </div>
+                                        <div class="tab-pane fade" id="second_{{index}}" role="tabpanel"
+                                            aria-labelledby="second-tab_{{index}}">
+                                            <div class="table-responsive-md">
+                                                <table class="table table-bordered">
+                                                    <tbody>
+                                                        <tr ng-repeat="(FK, fareval) in FareDetails.FareBreakdown">
+                                                            <td>{{fareval.PassengerCount}} x {{fareval.PaxType}}</td>
+                                                            <td class="text-right"><small class="text-muted" style="font-size: 12px;">{{fareval.Currency}}</small> {{fareval.BF}}</td>
+                                                        </tr>
+                                                        <tr>
+                                                            <td class="farefont">Total (Base Fare)</td>
+                                                            <td class="text-right"><small class="text-muted" style="font-size: 12px;">{{FareDetails.Currency}}</small> {{FareDetails.BaseFare | number: 2}}</td>
+                                                        </tr>
+                                                        <tr>
+                                                            <td class="farefont">Total Tax</td>
+                                                            <td class="text-right"><small class="text-muted" style="font-size: 12px;">{{FareDetails.Currency}}</small> {{FareDetails.Tax | number: 2}}</td>
+                                                        </tr>
+                                                        <!-- <tr>
+                                                            <td>Fees &amp; Surcharge</td>
+                                                            <td class="text-right">$165</td>
+                                                        </tr> -->
+                                                        <tr>
+                                                            <td class="farefont">Total (Fees &amp; Surcharge)</td>
+                                                            <td class="text-right"><small class="text-muted" style="font-size: 12px;">{{FareDetails.Currency}}</small> {{FareDetails.PublishedFare | number: 2}}</td>
+                                                        </tr>
+                                                    </tbody>
+                                                </table>
+                                            </div>
+                                        </div>
+                                        <div class="tab-pane fade" id="third_{{index}}" role="tabpanel"
+                                            aria-labelledby="third-tab_{{index}}">
+                                            <div class="table-responsive-md baggagerule">
+                                                <table width="100%" class="table table-bordered">
+                                                    <tbody>
+                                                        <tr>
+                                                            <th>
+                                                                <p class="frtbl_hd">Airline</p>
+                                                            </th>
+                                                            <th>
+                                                                <p class="frtbl_hd">Sector</p>
+                                                            </th>
+                                                            <th>
+                                                                <p class="frtbl_hd">Check-in Baggage</p>
+                                                            </th>
+                                                            <th>
+                                                                <p class="frtbl_hd">Cabin Baggage</p>
+                                                            </th>
+                                                        </tr>
+                                                        <tr ng-repeat="(key, value) in item.Segments">
+                                                            <td>
+                                                                <div class="flgi-l"
+                                                                    style="float:left;margin-right:10px">
+                                                                    <img class="img-fluid flightLogo"
+                                                                        ng-src="{{value.filePath}}"
+                                                                        alt="{{value.AirlineName}}"
+                                                                        src="{{value.filePath}}">
+                                                                </div>
+                                                                <div style="float:left;font-size:11px;">
+                                                                    <p style="margin: 0;">{{value.AirlineName}}</p>
+                                                                    <p style="margin: 0;">{{value.SegFlightNumber}}</p>
+                                                                </div>
+                                                            </td>
+                                                            <td>{{value.originAirportCode}} -
+                                                                {{value.destinationAirportCode}}</td>
+                                                            <td>{{value.Baggage}}</td>
+                                                            <td>{{value.CabinBaggage}}</td>
+                                                        </tr>
+                                                        <tr>
+                                                            <td colspan="4">
+                                                                <div class="termsbagg">
+                                                                    <ul>
+                                                                        <li>Baggage information mentioned above is
+                                                                            obtained from airline's reservation system,
+                                                                            Holidayfly does not guarantee the accuracy
+                                                                            of this information.</li>
+                                                                        <li>The baggage allowance may vary according to
+                                                                            stop-overs, connecting flights. changes in
+                                                                            airline rules. etc.</li>
+                                                                    </ul>
+                                                                </div>
+                                                            </td>
+                                                        </tr>
+                                                    </tbody>
+                                                </table>
+
+                                            </div>
+                                        </div>
+                                        <div class="tab-pane fade FareRules_c" id="fourth_{{index}}" role="tabpanel"
+                                            aria-labelledby="fourth-tab_{{index}}">
+                                            <table class="table table-bordered">
+                                                <thead>
+                                                    <tr>
+                                                        <th bgcolor="#f5f5f5">Sector</th>
+                                                        <th bgcolor="#f5f5f5">Time Frame to cancel</th>
+                                                        <th bgcolor="#f5f5f5">Airline Fees</th>
+                                                        <th bgcolor="#f5f5f5">Service Fee</th>
+                                                    </tr>
+                                                </thead>
+                                                <tbody>
+                                                    <tr>
+                                                        <td colspan="4" class="text-center" bgcolor="#f5f5f5">CANCELLATION</td>
+                                                    </tr>
+                                                    <tr ng-repeat="(kF, farevl) in FareRules_cancel">
+                                                        <td>{{farevl.sector}}</td>
+                                                        <td><p ng-repeat="(ik, vl) in farevl.CANCELLATION.policyInfo">{{vl}}</p></td>
+                                                        <td>{{farevl.CANCELLATION.amount | number:2}}</td>
+                                                        <td>{{farevl.CANCELLATION.additionalFee | number:2}}</td>
+                                                    </tr>
+                                                    <tr>
+                                                        <td colspan="4" class="text-center" bgcolor="#f5f5f5">DATE CHANGE</td>
+                                                    </tr>
+                                                    <tr ng-repeat="(kF, farevl) in FareRules_cancel">
+                                                        <td>{{farevl.sector}}</td>
+                                                        <td><p ng-repeat="(ik, vl) in farevl.DATECHANGE.policyInfo">{{vl}}</p></td>
+                                                        <td>{{farevl.DATECHANGE.amount | number:2}}</td>
+                                                        <td>{{farevl.DATECHANGE.additionalFee | number:2}}</td>
+                                                    </tr>
+                                                    <tr>
+                                                        <td colspan="4" class="text-center" bgcolor="#f5f5f5">NO SHOW</td>
+                                                    </tr>
+                                                    <tr ng-repeat="(kF, farevl) in FareRules_cancel">
+                                                        <td>{{farevl.sector}}</td>
+                                                        <td><p ng-repeat="(ik, vl) in farevl.NO_SHOW.policyInfo">{{vl}}</p></td>
+                                                        <td>{{farevl.NO_SHOW.amount | number:2}}</td>
+                                                        <td>{{farevl.NO_SHOW.additionalFee | number:2}}</td>
+                                                    </tr>
+                                                    <tr>
+                                                        <td colspan="4" class="text-center" bgcolor="#f5f5f5">SEAT CHARGEABLE</td>
+                                                    </tr>
+                                                    <tr ng-repeat="(kF, farevl) in FareRules_cancel">
+                                                        <td>{{farevl.sector}}</td>
+                                                        <td colspan="3"><p ng-repeat="(ik, vl) in farevl.SEAT_CHARGEABLE.policyInfo">{{vl}}</p></td>
+                                                    </tr>
+                                                    
+                                                </tbody>
+                                            </table>
+                                            <p class="font-weight-bold">Terms & Conditions</p>
+                                            <ul>
+                                                <li>Partial cancellation is not allowed on the flight tickets which are book under special round trip discounted fares.</li>
+                                                <li>Total Rescheduling Charges Airlines Rescheduling fees Fare Difference if applicable + Service Fees.</li>
+                                                <li>The airline cancel reschedule fees is indicative and can be changed without any prior notice by the airlines..</li>
+                                                <li>In certain situations of restricted cases, no amendments and cancellation is allowed.</li>
+                                                <li>Airlines cancel reschedule should be reconfirmed before requesting for a cancellation or amendment.</li>
+                                                <li>Airlines doesnt allow any additional baggage allowance for any infant added in the booking.</li>
+                                                <li>Holidayfly does not guarantee the accuracy of cancel reschedule fees.</li>
+                                            </ul>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <button type="button" ng-if="loadingFlight == false" ng-click="loadMoreNew()" class="btn btn-primary btn-block">Load More</button>
+                    {% endverbatim %}
+                    <div class="flight-list">
+                        <div class="flight-item">
+                            <div class="row align-items-center flex-row pt-4 pb-2 px-3">
+                                <div class="col col-sm-2 text-center d-lg-flex company-info">
+                                    <span class="align-middle">
+                                        <img class="img-fluid flightLogo" alt=""
+                                            src="{% static 'assets/AirlineLogo/6E.png' %}">
+                                    </span>
+                                    <span class="align-middle ml-lg-2">
+                                        <span class="d-block text-1 text-dark">IndiGo</span>
+                                        <small class="text-muted d-block">6E-2726</small>
+                                    </span>
+                                </div>
+                                <div class="col col-sm-2 text-center time-info"> <span
+                                        class="text-4 timeColor">23:00</span>
+                                    <small class="text-muted d-none d-sm-block">Delhi</small>
+                                </div>
+                                <div class="col-sm-2 text-center d-none d-sm-block time-info"> <span
+                                        class="text-3 timeColor">18h
+                                        55m</span>
+                                    <small class="text-muted d-none d-sm-block">Non Stop</small>
+                                </div>
+                                <div class="col col-sm-2 text-center time-info"> <span
+                                        class="text-4 timeColor">18:15</span>
+                                    <small class="text-muted d-none d-sm-block">Sydney</small>
+                                </div>
+                                <div class="col col-sm-2 text-right text-dark text-6 price">$980</div>
+                                <div class="col-12 col-sm-2 text-center ml-auto btn-book"> <a
+                                        href="booking-flights-confirm-details.html" class="btn btn-sm btn-primary"><i
+                                            class="fas fa-shopping-cart d-block d-lg-none"></i> <span
+                                            class="d-none d-lg-block">Book</span></a> </div>
+                                <div class="col col-sm-auto col-lg-5 ml-auto mt-1 text-1 text-left">
+                                    <a href="javascript:void(0)">Layover - Hyderabad 3h
+                                        00m</a>
+                                </div>
+                                <div class="col col-sm-auto col-lg-5 ml-auto mt-1 text-1 text-center">
+                                    <a href="javascript:void(0)" style="color: green;">Use GI2022 and get Rs. 310
+                                        discount</a>
+                                </div>
+                                <div class="col col-sm-auto col-lg-2 ml-auto mt-1 text-1 text-center">
+                                    <a data-toggle="modal" data-target="#flight-1" href="">Flight Details</a>
+                                </div>
+                            </div>
+                        </div>
+
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+    <div id="flight-1" class="modal fade" role="dialog" aria-hidden="true">
+        <div class="modal-dialog modal-lg modal-dialog-centered" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">Flight Details</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close"> <span
+                            aria-hidden="true">&times;</span> </button>
+                </div>
+                <div class="modal-body">
+                    <div class="flight-details">
+                        <div class="row mb-4">
+                            <div class="col-12 col-sm-9 col-lg-8">
+                                <div class="row align-items-center trip-title mb-3">
+                                    <div class="col col-sm-auto text-center text-sm-left">
+                                        <h5 class="m-0 trip-place">New Delhi</h5>
+                                    </div>
+                                    <div class="col-auto text-10 text-black-50 text-center trip-arrow">➝</div>
+                                    <div class="col col-sm-auto text-center text-sm-left">
+                                        <h5 class="m-0 trip-place">Sydney</h5>
+                                    </div>
+                                </div>
+                                <div class="row align-items-center">
+                                    <div class="col col-sm-auto"><span class="text-4">15 Jun 18, Sat</span></div>
+                                    <div class="col-auto"><span
+                                            class="badge badge-success py-1 px-2 font-weight-normal text-1">Refundable</span>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-12 col-sm-3 col-lg-2 text-center text-sm-right mt-3 mt-sm-0"> <span
+                                    class="text-dark text-7">$980 </span> <span class="text-1 text-muted d-block">(Per
+                                    Adult)</span> <span class="text-1 text-danger d-block">2 seat(s) left</span></div>
+                            <div class="col-12 col-sm-3 col-lg-2 text-right ml-auto btn-book"> <a
+                                    href="booking-flights-confirm-details.html" class="btn btn-sm btn-primary"><i
+                                        class="fas fa-shopping-cart d-block d-lg-none"></i> <span
+                                        class="d-none d-lg-block">Book</span></a> </div>
+                        </div>
+                        <ul class="nav nav-tabs" id="myTab" role="tablist">
+                            <li class="nav-item"> <a class="nav-link active" id="first-tab" data-toggle="tab"
+                                    href="#first" role="tab" aria-controls="first" aria-selected="true">Itinerary</a>
+                            </li>
+                            <li class="nav-item"> <a class="nav-link" id="second-tab" data-toggle="tab" href="#second"
+                                    role="tab" aria-controls="second" aria-selected="false">Fare Details</a> </li>
+                            <li class="nav-item"> <a class="nav-link" id="third-tab" data-toggle="tab" href="#third"
+                                    role="tab" aria-controls="third" aria-selected="false">Baggage Details</a> </li>
+                            <li class="nav-item"> <a class="nav-link" id="fourth-tab" data-toggle="tab" href="#fourth"
+                                    role="tab" aria-controls="fourth" aria-selected="false">Cancellation Fee</a> </li>
+                        </ul>
+                        <div class="tab-content my-3" id="myTabContent">
+                            <div class="tab-pane fade show active" id="first" role="tabpanel"
+                                aria-labelledby="first-tab">
+                                <div class="row flex-row pt-4 px-md-4">
+                                    <div class="col-12 col-sm-3 text-center d-lg-flex company-info"> <span
+                                            class="align-middle"><img class="img-fluid" alt=""
+                                                src="images/brands/flights/indigo.png"> </span> <span
+                                            class="align-middle ml-lg-2"> <span
+                                                class="d-block text-1 text-dark">IndiGo</span>
+                                            <small class="text-muted d-block">6E-2726</small> </span> </div>
+                                    <div class="col-12 col-sm-3 text-center time-info mt-3 mt-sm-0"> <span
+                                            class="text-5 text-dark">23:00</span> <small
+                                            class="text-muted d-block">Indira
+                                            Gandhi Intl, New Delhi</small> </div>
+                                    <div class="col-12 col-sm-3 text-center time-info mt-3 mt-sm-0"> <span
+                                            class="text-3 text-dark">18h 55m</span> <small
+                                            class="text-muted d-block">Duration</small> </div>
+                                    <div class="col-12 col-sm-3 text-center time-info mt-3 mt-sm-0"> <span
+                                            class="text-5 text-dark">18:15</span> <small
+                                            class="text-muted d-block">Kingsford
+                                            Smith Airport, Sydney</small> </div>
+                                </div>
+                            </div>
+                            <div class="tab-pane fade" id="second" role="tabpanel" aria-labelledby="second-tab">
+                                <div class="table-responsive-md">
+                                    <table class="table table-hover table-bordered">
+                                        <tbody>
+                                            <tr>
+                                                <td>Base Fare</td>
+                                                <td class="text-right">$815</td>
+                                            </tr>
+                                            <tr>
+                                                <td>Fees &amp; Surcharge</td>
+                                                <td class="text-right">$165</td>
+                                            </tr>
+                                            <tr>
+                                                <td>Total</td>
+                                                <td class="text-right">$980</td>
+                                            </tr>
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
+                            <div class="tab-pane fade" id="third" role="tabpanel" aria-labelledby="third-tab">
+                                <div class="table-responsive-md">
+                                    <table class="table table-hover table-bordered">
+                                        <thead>
+                                            <tr>
+                                                <th>&nbsp;</th>
+                                                <td class="text-center">Cabin</td>
+                                                <td class="text-center">Check-In</td>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            <tr>
+                                                <td>Adult</td>
+                                                <td class="text-center">7 Kg</td>
+                                                <td class="text-center">15 Kg</td>
+                                            </tr>
+                                            <tr>
+                                                <td>Child</td>
+                                                <td class="text-center">7 Kg</td>
+                                                <td class="text-center">15 Kg</td>
+                                            </tr>
+                                            <tr>
+                                                <td>Infant</td>
+                                                <td class="text-center">0 Kg</td>
+                                                <td class="text-center">0 Kg</td>
+                                            </tr>
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
+                            <div class="tab-pane fade" id="fourth" role="tabpanel" aria-labelledby="fourth-tab">
+                                <table class="table table-hover table-bordered">
+                                    <thead>
+                                        <tr>
+                                            <th>&nbsp;</th>
+                                            <td class="text-center">Per Passenger Fee</td>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr>
+                                            <td>24 hrs - 365 days</td>
+                                            <td class="text-center">$250 + $50</td>
+                                        </tr>
+                                        <tr>
+                                            <td>2-24 hours</td>
+                                            <td class="text-center">$350 + $50</td>
+                                        </tr>
+                                        <tr>
+                                            <td>0-2 hours</td>
+                                            <td class="text-center">$550 + $50</td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                                <p class="font-weight-bold">Terms & Conditions</p>
+                                <ul>
+                                    <li>The penalty is subject to 4 hrs before departure. No Changes are allowed after
+                                        that.</li>
+                                    <li>The charges are per passenger per sector.</li>
+                                    <li>Partial cancellation is not allowed on tickets booked under special discounted
+                                        fares.</li>
+                                    <li>In case of no-show or ticket not cancelled within the stipulated time, only
+                                        statutory taxes are refundable subject to Service Fee.</li>
+                                    <li>No Baggage Allowance for Infants</li>
+                                    <li>Airline penalty needs to be reconfirmed prior to any amendments or cancellation.
+                                    </li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div><!-- Flight Details Modal Dialog end -->
+</div><!-- Content end -->
+
+
+{% endblock content %}

@@ -1,0 +1,300 @@
+<!DOCTYPE html>
+{% load static %}
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Holidayfly</title>
+    <link rel="shortcut icon" href="{% static 'assets/images/favicon.ico' %}" type="image/x-icon">
+
+    <link rel='stylesheet' href='https://fonts.googleapis.com/css?family=Poppins:100,200,300,400,500,600,700,800,900'
+        type='text/css'>
+
+    <!-- Stylesheet
+============================================= -->
+    <link rel="stylesheet" type="text/css" href="{% static 'assets/vendor/bootstrap/css/bootstrap.min.css' %}" />
+    <link rel="stylesheet" type="text/css" href="{% static 'assets/vendor/font-awesome/css/all.min.css' %}" />
+    <link rel="stylesheet" type="text/css"
+        href="{% static 'assets/vendor/owl.carousel/assets/owl.carousel.min.css' %}" />
+    <link rel="stylesheet" type="text/css"
+        href="{% static 'assets/vendor/owl.carousel/assets/owl.theme.default.min.css' %}" />
+    <link rel="stylesheet" type="text/css" href="{% static 'assets/vendor/jquery-ui/jquery-ui.css' %}" />
+    <link rel="stylesheet" type="text/css" href="{% static 'assets/vendor/daterangepicker/daterangepicker.css' %}" />
+    <link rel="stylesheet" type="text/css" href="{% static 'assets/css/stylesheet.css' %}" />
+    <link rel="stylesheet" type="text/css" href="{% static 'assets/css/custom.css' %}" />
+</head>
+
+<body>
+    <div id="preloader">
+        <div data-loader="dual-ring"></div>
+    </div>
+    <div id="main-wrapper">
+        {% include 'header.html' %}
+
+        {% block content %} {% endblock content %}
+
+        {% include 'footer.html' %}
+
+    </div>
+    <a id="back-to-top" data-toggle="tooltip" title="Back to Top" href="javascript:void(0)"><i
+            class="fa fa-chevron-up"></i></a>
+
+    <!-- Login Modal
+=========================== -->
+    <div id="login-modal" class="modal fade" role="dialog" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered" role="document">
+            <div class="modal-content border-0">
+                <div class="modal-body py-4 px-0">
+                    <button type="button" class="close close-outside" data-dismiss="modal" aria-label="Close"> <span
+                            aria-hidden="true">&times;</span> </button>
+                    <!-- Login Form
+        ====================== -->
+                    <div class="row">
+                        <div class="col-11 col-md-10 mx-auto">
+                            <ul class="nav nav-tabs nav-justified mb-4" role="tablist">
+                                <li class="nav-item"> <a class="nav-link text-5 line-height-3 active">Login</a> </li>
+                                <li class="nav-item"> <a class="nav-link text-5 line-height-3" href=""
+                                        data-toggle="modal" data-target="#signup-modal" data-dismiss="modal">Sign Up</a>
+                                </li>
+                            </ul>
+                            <p class="text-4 font-weight-300 text-muted text-center mb-4">We are glad to see you again!
+                            </p>
+                            <form id="loginForm" method="post">
+                                <div class="form-group">
+                                    <input type="email" class="form-control" id="emailAddress" required
+                                        placeholder="Mobile or Email">
+                                </div>
+                                <div class="form-group">
+                                    <input type="password" class="form-control" id="loginPassword" required
+                                        placeholder="Password">
+                                </div>
+                                <div class="row my-4">
+                                    <div class="col">
+                                        <div class="form-check text-2 custom-control custom-checkbox">
+                                            <input id="remember-me" name="remember" class="custom-control-input"
+                                                type="checkbox">
+                                            <label class="custom-control-label" for="remember-me">Remember Me</label>
+                                        </div>
+                                    </div>
+                                    <div class="col text-2 text-right"><a class="btn-link" href="" data-toggle="modal"
+                                            data-target="#forgot-password-modal" data-dismiss="modal">Forgot Password
+                                            ?</a></div>
+                                </div>
+                                <button class="btn btn-primary btn-block my-4" type="submit">Login</button>
+                            </form>
+                            <div class="d-flex align-items-center my-3">
+                                <hr class="flex-grow-1">
+                                <span class="mx-2 text-2 text-muted">Or Login with Social Profile</span>
+                                <hr class="flex-grow-1">
+                            </div>
+                            <div class="d-flex  flex-column align-items-center mb-3">
+                                <ul class="social-icons social-icons-colored social-icons-circle">
+                                    <li class="social-icons-facebook"><a href="#" data-toggle="tooltip"
+                                            data-original-title="Log In with Facebook"><i
+                                                class="fab fa-facebook-f"></i></a></li>
+                                    <li class="social-icons-twitter"><a href="#" data-toggle="tooltip"
+                                            data-original-title="Log In with Twitter"><i class="fab fa-twitter"></i></a>
+                                    </li>
+                                    <li class="social-icons-google"><a href="#" data-toggle="tooltip"
+                                            data-original-title="Log In with Google"><i class="fab fa-google"></i></a>
+                                    </li>
+                                    <li class="social-icons-linkedin"><a href="#" data-toggle="tooltip"
+                                            data-original-title="Log In with Linkedin"><i
+                                                class="fab fa-linkedin-in"></i></a></li>
+                                </ul>
+                            </div>
+                            <p class="text-2 text-center mb-0">New to Quickai? <a class="btn-link" href=""
+                                    data-toggle="modal" data-target="#signup-modal" data-dismiss="modal">Sign Up</a></p>
+                        </div>
+                    </div>
+                    <!-- Login Form End -->
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- Login Modal End -->
+
+    <!-- Sign Up Modal
+=========================== -->
+    <div id="signup-modal" class="modal fade" role="dialog" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered" role="document">
+            <div class="modal-content border-0">
+                <div class="modal-body py-4 px-0">
+                    <button type="button" class="close close-outside" data-dismiss="modal" aria-label="Close"> <span
+                            aria-hidden="true">&times;</span> </button>
+                    <!-- Sign Up Form
+        ====================== -->
+                    <div class="row">
+                        <div class="col-11 col-md-10 mx-auto">
+                            <ul class="nav nav-tabs nav-justified mb-4" role="tablist">
+                                <li class="nav-item"> <a class="nav-link text-5 line-height-3" href=""
+                                        data-toggle="modal" data-target="#login-modal" data-dismiss="modal">Log In</a>
+                                </li>
+                                <li class="nav-item"> <a class="nav-link text-5 line-height-3 active">Sign Up</a> </li>
+                            </ul>
+                            <p class="text-4 font-weight-300 text-muted text-center mb-4">Looks like you're new here!
+                            </p>
+                            <form id="signupForm" method="post">
+                                <div class="form-group">
+                                    <input type="text" class="form-control border-2" id="fullName" required
+                                        placeholder="Your Name">
+                                </div>
+                                <div class="form-group">
+                                    <input type="email" class="form-control border-2" id="emailAddress" required
+                                        placeholder="Email Id">
+                                </div>
+                                <div class="form-group">
+                                    <input type="password" class="form-control border-2" id="loginPassword" required
+                                        placeholder="Password">
+                                </div>
+                                <div class="form-group my-4">
+                                    <div class="form-check text-2 custom-control custom-checkbox">
+                                        <input id="agree" name="agree" class="custom-control-input" type="checkbox">
+                                        <label class="custom-control-label" for="agree">I agree to the <a
+                                                href="#">Terms</a> and <a href="#">Privacy Policy</a>.</label>
+                                    </div>
+                                </div>
+                                <button class="btn btn-primary btn-block my-4" type="submit">Sign Up</button>
+                            </form>
+                            <div class="d-flex align-items-center my-3">
+                                <hr class="flex-grow-1">
+                                <span class="mx-2 text-2 text-muted">Or Sign Up with Social Profile</span>
+                                <hr class="flex-grow-1">
+                            </div>
+                            <div class="d-flex  flex-column align-items-center mb-3">
+                                <ul class="social-icons social-icons-colored social-icons-circle">
+                                    <li class="social-icons-facebook"><a href="#" data-toggle="tooltip"
+                                            data-original-title="Sign Up with Facebook"><i
+                                                class="fab fa-facebook-f"></i></a></li>
+                                    <li class="social-icons-twitter"><a href="#" data-toggle="tooltip"
+                                            data-original-title="Sign Up with Twitter"><i
+                                                class="fab fa-twitter"></i></a></li>
+                                    <li class="social-icons-google"><a href="#" data-toggle="tooltip"
+                                            data-original-title="Sign Up with Google"><i class="fab fa-google"></i></a>
+                                    </li>
+                                    <li class="social-icons-linkedin"><a href="#" data-toggle="tooltip"
+                                            data-original-title="Sign Up with Linkedin"><i
+                                                class="fab fa-linkedin-in"></i></a></li>
+                                </ul>
+                            </div>
+                            <p class="text-2 text-center mb-0">Already have an account? <a class="btn-link" href=""
+                                    data-toggle="modal" data-target="#login-modal" data-dismiss="modal">Log In</a></p>
+                        </div>
+                    </div>
+                    <!-- Sign Up Form End -->
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- Sign Up Modal End -->
+
+    <!-- Forgot Password Modal
+============================== -->
+    <div id="forgot-password-modal" class="modal fade" role="dialog" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered" role="document">
+            <div class="modal-content border-0">
+                <div class="modal-body py-4 px-0">
+                    <button type="button" class="close close-outside" data-dismiss="modal" aria-label="Close"> <span
+                            aria-hidden="true">&times;</span> </button>
+                    <!-- Forgot Password Form
+        =========================== -->
+                    <div class="row">
+                        <div class="col-11 col-md-10 mx-auto">
+                            <h3 class="text-center mt-3 mb-4">Forgot your password?</h3>
+                            <p class="text-center text-3 text-muted">Enter your Email or Mobile and we’ll help you reset
+                                your
+                                password.</p>
+                            <form id="forgotForm" class="form-border" method="post">
+                                <div class="form-group">
+                                    <input type="text" class="form-control border-2" id="emailAddress" required
+                                        placeholder="Enter Email or Mobile Number">
+                                </div>
+                                <button class="btn btn-primary btn-block my-4" type="submit">Continue</button>
+                            </form>
+                            <p class="text-center mb-0"><a class="btn-link" href="" data-toggle="modal"
+                                    data-target="#login-modal" data-dismiss="modal">Return to Log In</a> <span
+                                    class="text-muted mx-3">|</span> <a class="btn-link" href="" data-toggle="modal"
+                                    data-target="#otp-modal" data-dismiss="modal">Request OTP</a></p>
+                        </div>
+                    </div>
+                    <!-- Forgot Password Form End -->
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- Forgot Password Modal End -->
+
+    <!-- OTP Modal
+============================== -->
+    <div id="otp-modal" class="modal fade" role="dialog" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered" role="document">
+            <div class="modal-content border-0">
+                <div class="modal-body py-4 px-0">
+                    <button type="button" class="close close-outside" data-dismiss="modal" aria-label="Close"> <span
+                            aria-hidden="true">&times;</span> </button>
+                    <!-- OTP Form
+        =========================== -->
+                    <div class="row">
+                        <div class="col-11 col-md-10 mx-auto">
+                            <h3 class="text-center mt-3 mb-4">Two-Step Verification</h3>
+                            <p class="text-center"><img class="img-fluid"
+                                    src="{% static 'assets/images/otp-icon.png' %}" alt="verification">
+                            </p>
+                            <p class="text-muted text-3 text-center">Please enter the OTP (one time password) to verify
+                                your account.
+                                A Code has been sent to <span class="text-dark text-4">+1*******179</span></p>
+                            <form id="otp-screen" class="form-border" method="post">
+                                <div class="form-row">
+                                    <div class="col form-group">
+                                        <input type="text" class="form-control border-2 text-center text-6 px-0 py-2"
+                                            maxlength="1" required autocomplete="off">
+                                    </div>
+                                    <div class="col form-group">
+                                        <input type="text" class="form-control border-2 text-center text-6 px-0 py-2"
+                                            maxlength="1" required autocomplete="off">
+                                    </div>
+                                    <div class="col form-group">
+                                        <input type="text" class="form-control border-2 text-center text-6 px-0 py-2"
+                                            maxlength="1" required autocomplete="off">
+                                    </div>
+                                    <div class="col form-group">
+                                        <input type="text" class="form-control border-2 text-center text-6 px-0 py-2"
+                                            maxlength="1" required autocomplete="off">
+                                    </div>
+                                </div>
+                                <button class="btn btn-primary btn-block shadow-none my-4" type="submit">Verify</button>
+                            </form>
+                            <p class="text-2 text-center">Not received your code? <a class="btn-link" href="#">Resend
+                                    code</a></p>
+                            <p class="text-2 text-center mb-0"><a class="btn-link" href="#">Call me</a></p>
+                        </div>
+                    </div>
+                    <!-- OTP Form End -->
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- OTP Modal End -->
+    <script src="{% static 'assets/vendor/jquery/jquery.min.js' %}"></script>
+    <script src="{% static 'assets/vendor/jquery-ui/jquery-ui.min.js' %}"></script>
+    <script src="{% static 'assets/vendor/bootstrap/js/bootstrap.bundle.min.js' %}"></script>
+    <script src="{% static 'assets/vendor/owl.carousel/owl.carousel.min.js' %}"></script>
+    <script src="{% static 'assets/vendor/easy-responsive-tabs/easy-responsive-tabs.js' %}"></script>
+    <script src="{% static 'assets/vendor/bootstrap-spinner/bootstrap-spinner.js' %}"></script>
+    <script src="{% static 'assets/vendor/daterangepicker/moment.min.js' %}"></script>
+    <script src="{% static 'assets/vendor/daterangepicker/daterangepicker.js' %}"></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.6.9/angular.min.js"></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.6.9/angular-sanitize.js"></script>
+    <script>
+        var SITEURL = "{% url 'autocompleteairport' %}";
+        console.log(SITEURL);
+    </script>
+    <script src="{% static 'assets/js/theme.js' %}"></script>
+    <script>
+        angular.module("AppHolidayfly").constant("CSRF_TOKEN", '{{ csrf_token }}');
+      </script>
+</body>
+
+</html>

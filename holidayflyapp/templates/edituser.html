@@ -1,0 +1,9 @@
+{% extends 'layout.html' %}
+{% block content %}
+<h4>Edit user  {{id}}</h4>
+<form action="" method="post">
+    {% csrf_token %}
+    {{form.as_p}}
+    <input type="submit" value="Save">
+</form>
+{% endblock content %}
