@@ -18,16 +18,23 @@ from django.urls import path
 from holidayflyapp import views
 from holidayflyapp import flightcontrollers
 
+from django.conf import settings
+from django.conf.urls.static import static
+
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('', views.index, name='index'),
     path('addnew/', views.addnew, name='addnew'),
     path('delete/<int:id>/', views.delete_user, name='deletedata'),
     path('edit/<int:id>/', views.edituser, name='editdata'),
-    path('flight-search/<str:TraceId>/', views.searchflight, name='flight-search'),
+    path('flight-search/<str:TraceId>/',
+         views.searchflight, name='flight-search'),
     path('requestSearch', views.requestSearch, name='requestSearch'),
-    
-    path('autocompleteairport', flightcontrollers.autocompleteairport, name='autocompleteairport'),
-    path('flightdata/<str:TraceId>/', flightcontrollers.flightdata, name='flightdata'),
-    path('farerulescancel/<str:PriceID>/', flightcontrollers.FarerulesCancellation, name='farerulescancel'),
-]
+
+    path('autocompleteairport', flightcontrollers.autocompleteairport,
+         name='autocompleteairport'),
+    path('flightdata/<str:TraceId>/',
+         flightcontrollers.flightdata, name='flightdata'),
+    path('farerulescancel/<str:PriceID>/',
+         flightcontrollers.FarerulesCancellation, name='farerulescancel'),
+] + static(settings.STATIC_URL, document_root=settings.STATIC_ROOT)
