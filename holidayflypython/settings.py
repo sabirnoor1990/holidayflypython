@@ -150,7 +150,7 @@ FLIGHTCLASSES = {
 }
 isProductionEnabled = False
 apiurl = 'http://localhost' # Local
-#apiurl = 'http://localhost' # Live
+#apiurl = 'https://holidafly.herokuapp.com' # Live
 if isProductionEnabled:
     APIURL = {
         'APIKEY': '71003292899e6c83-b2a9-4a3a-a668-931a4eb4a3d6',

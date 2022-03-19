@@ -505,7 +505,6 @@ app.controller('holidayflyCtrl', ['$scope', '$http', '$location', '$filter', '$w
 		$scope.FiltAirline = response.data.FiltAirline;
 		$scope.Minprice = response.data.Minprice;
 		$scope.Maxprice = response.data.Maxprice;
-
 		$("#slider-range").slider({
 			range: true,
 			min: $scope.Minprice,
@@ -514,6 +513,8 @@ app.controller('holidayflyCtrl', ['$scope', '$http', '$location', '$filter', '$w
 			slide: function (event, ui) {
 				$("#amount").val("INR " + ui.values[0] + " - INR " + ui.values[1]);
 				$("#hiddenamount").val(ui.values[0] + "-" + ui.values[1]);
+				angular.element('#content').scope().priceFilter(ui.values[0], ui.values[1]);
+				angular.element('#content').scope().$apply()
 			}
 		});
 		$("#amount").val("INR " + $("#slider-range").slider("values", 0) + " - INR " + $("#slider-range").slider("values", 1));
@@ -563,33 +564,65 @@ app.controller('holidayflyCtrl', ['$scope', '$http', '$location', '$filter', '$w
 			return arr.indexOf(w) === idx;
 		});
 	};
-	$scope.loadMoreNew = function() {
-        if ($scope.loadingFlight === false) {
-            if ($scope.limit + 10 < $scope.flightlistOutbound.length) {
-                $scope.limit += 10;
-            } else {
-                $scope.limit = $scope.flightlistOutbound.length;
-            }
-        }
-    };
+	$scope.priceFilter = function (min, max) {
+		$scope.pricefilterInit = function (item) {
+			if ((item.PublishedFare >= min) && (item.PublishedFare <= max)) {
+				return item;
+			}
+		};
+	};
+	$scope.loadMoreNew = function () {
+		if ($scope.loadingFlight === false) {
+			if ($scope.limit + 10 < $scope.flightlistOutbound.length) {
+				$scope.limit += 10;
+			} else {
+				$scope.limit = $scope.flightlistOutbound.length;
+			}
+		}
+	};
+	$scope.loadMoreNew2 = function () {
+		if ($scope.loadingFlight === false) {
+			if ($scope.limit + 10 < $scope.flightlistInbound.length) {
+				$scope.limit += 10;
+			} else {
+				$scope.limit = $scope.flightlistInbound.length;
+			}
+		}
+	};
 	$scope.FlightDetails = function (item, index) {
 		$('#FlightdetailsDiv_' + index).show();
 		$scope.FareDetails = item.FairRules[0];
 		$scope.PriceIdsss = item.FairRules[0].PriceID;
 	};
+	$scope.FlightDetailsRound = function (item, index) {
+		$('#FlightdetailsDivRound_' + index).show();
+		$scope.FareDetailsRound = item.FairRules[0];
+		$scope.PriceIdsss = item.FairRules[0].PriceID;
+	};
 	$scope.MoreFare = function (item, index) {
-		$('#MoreFareDiv_' + index).show();
-
+		var TextVal = $('#MoreFareID' + index).text();
+		if (TextVal == '+ More Fare') {
+			$('#MoreFareID' + index).html('- Less Fare');
+			$('#MoreFareDiv_' + index).show();
+		} else {
+			$('#MoreFareID' + index).html('+ More Fare');
+			$('#MoreFareDiv_' + index).hide();
+		}
 	};
 	$scope.Fare_Details = function (item, index) {
 		$scope.FareDetails = item;
 		$scope.PriceIdsss = item.PriceID;
+		$('#FlightdetailsDiv_' + index).show();
+		//$('#second-tab_' + index).trigger('click');
 	};
 	$scope.crossIcons = function (index) {
 		$('#FlightdetailsDiv_' + index).hide();
 	};
-	$scope.FarerulesCancellation = function (item,PriceID) {
-		var url = "/farerulescancel/"+PriceID+'/';
+	$scope.crossIconsRound = function (index) {
+		$('#FlightdetailsDivRound_' + index).hide();
+	};
+	$scope.FarerulesCancellation = function (item, PriceID) {
+		var url = "/farerulescancel/" + PriceID + '/';
 		$scope.fareRulesCancel = true;
 		$http({
 			method: "GET",
@@ -610,6 +643,79 @@ app.controller('holidayflyCtrl', ['$scope', '$http', '$location', '$filter', '$w
 		}, function errorCallback(response) {
 			alert(response.data.message);
 		});
+	};
+
+	$scope.summprice = function (keyIndex, index, PriceID) {
+		if (keyIndex) {
+			$scope.PublishedFareTxt = 0;
+			var outboundFlightIndex = keyIndex;
+			var Outbound = $scope.flightlistOutbound.find(function (item) {
+				if (item.keyIndex === outboundFlightIndex) {
+					return item;
+				}
+			});
+			$.each(Outbound.FairRules, function (key, Fare) {
+				if (PriceID == Fare.PriceID) {
+					$scope.PublishedFareTxt = Fare.PublishedFare;
+				}
+			});
+			$scope.LocalToTime = Outbound.ToUTCTime;
+			$scope.duration();
+			$scope.roundtrip = Outbound;
+			console.log($scope.roundtrip)
+			return $scope.roundtrip;
+		}
+	};
+	$scope.summpricetwo = function (keyIndex, index, PriceID) {
+		if (keyIndex) {
+			$scope.RPublishedFareTxt = 0;
+			var inboundFlightIndex = keyIndex;
+			var Inbound = $scope.flightlistInbound.find(function (item) {
+				if (item.keyIndex === inboundFlightIndex) {
+					return item;
+				}
+			});
+			$.each(Inbound.FairRules, function (key, Fare) {
+				if (PriceID == Fare.PriceID) {
+					$scope.RPublishedFareTxt = Fare.PublishedFare;
+				}
+			});
+			$scope.LocalFromTime = Inbound.FromUTCTime;
+			$scope.duration();
+			$scope.roundtrip2 = Inbound;
+			return $scope.roundtrip2;
+		}
+	};
+
+	$scope.duration = function () {
+		var t0 = $scope.LocalToTime;
+		var t1 = $scope.LocalFromTime;
+		var start = t0;
+		var end = t1;
+		start = new Date(start);
+		end = new Date(end);
+		var diff = end.getTime() - start.getTime();
+		var time_difference = new Object();
+
+		time_difference.hours = Math.floor(diff / 1000 / 60 / 60);
+		diff -= time_difference.hours * 1000 * 60 * 60;
+		if (time_difference.hours < 10) time_difference.hours = time_difference.hours;
+
+		time_difference.minutes = Math.floor(diff / 1000 / 60);
+		diff -= time_difference.minutes * 1000 * 60;
+		if (time_difference.minutes < 10) time_difference.minutes = time_difference.minutes;
+		console.log(time_difference);
+		if (time_difference.hours < 2) {
+			setTimeout(function () {
+				$('.bookNowRound').attr('title', 'Departure time must be greater than previous Arrival time by 2 hours.');
+				$('.bookNowRound').css('background', '#575251');
+			}, 2000);
+			$scope.BookingAllowed = false;
+		} else {
+			$('.bookNowRound').removeAttr('title', '');
+			$('.bookNowRound').css('background', '#f8693e');
+			$scope.BookingAllowed = true;
+		}
 	};
 	//   $http.get("https://www.ineedtrip.com/flight/getflightsearch")
 	//   .then(function(response) {

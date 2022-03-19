@@ -105,9 +105,12 @@ def edituser(request, id):
 def searchflight(request, TraceId):
     data = TempData.objects.get(TraceId=TraceId)
     SearchData = ast.literal_eval(data.json_data)
-    print(TraceId)
-    print(SearchData['leaving'])
+    #print(TraceId)
+    print(SearchData)
     TotalPax = (int(SearchData['Adults'])+int(SearchData['Childs'])+int(SearchData['Infants']))
+    #TotalPax = (int(SearchData['route']))
+    #route = SearchData['route']
+    #international = SearchData['international']
     return render(request, "flight_search.html", {'FLIGHTCLASSES': settings.FLIGHTCLASSES,'TotalPax':TotalPax,'SearchData':SearchData,'TraceId':TraceId})
 
 # def flightdata(request):
