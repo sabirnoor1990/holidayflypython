@@ -106,7 +106,7 @@ def searchflight(request, TraceId):
     data = TempData.objects.get(TraceId=TraceId)
     SearchData = ast.literal_eval(data.json_data)
     #print(TraceId)
-    print(SearchData)
+    print(settings.APIURL['TRIPJACK_FL_SEARCHALL_URL'])
     TotalPax = (int(SearchData['Adults'])+int(SearchData['Childs'])+int(SearchData['Infants']))
     #TotalPax = (int(SearchData['route']))
     #route = SearchData['route']

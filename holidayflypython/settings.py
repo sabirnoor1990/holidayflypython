@@ -149,7 +149,7 @@ FLIGHTCLASSES = {
     'First': 'First',
 }
 isProductionEnabled = False
-apiurl = 'http://localhost' # Local
+apiurl = 'http://localhost/restapi' # Local
 #apiurl = 'https://holidafly.herokuapp.com' # Live
 if isProductionEnabled:
     APIURL = {
@@ -168,10 +168,9 @@ if isProductionEnabled:
 else:
     APIURL = {
         'APIKEY': '311588105d9884-721f-46d8-9e83-b7a77119c824',
-        'TRIPJACK_FL_SEARCHALL_URL': apiurl+'/restapi/api/search',
-        #'TRIPJACK_FL_SEARCHALL_URL': 'https://apitest.tripjack.com/fms/v1/air-search-all',
-        'TRIPJACK_FL_API_FARE_RULE_URL': apiurl+'/restapi/api/farerule',
-        'TRIPJACK_FL_API_REVIEW_URL': 'https://apitest.tripjack.com/fms/v1/review',
+        'TRIPJACK_FL_SEARCHALL_URL': apiurl+'/api/flight/v1/search',
+        'TRIPJACK_FL_API_FARE_RULE_URL': apiurl+'/api/flight/v1/farerule',
+        'TRIPJACK_FL_API_REVIEW_URL': apiurl+'/api/flight/v1/review',
         'TRIPJACK_FL_API_INSTANT_BOOK_URL': 'https://apitest.tripjack.com/oms/v1/air/book',
         'TRIPJACK_FL_API_BOOKINGDETAILS_URL': 'https://apitest.tripjack.com/oms/v1/booking-details',
         'TRIPJACK_FL_API_CONFIRMFAREBEFORETICKETING_URL': 'https://apitest.tripjack.com/oms/v1/air/fare-validate',

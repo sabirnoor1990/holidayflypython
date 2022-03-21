@@ -31,7 +31,6 @@ def flightdata(request, TraceId):
     SearchData = ast.literal_eval(data.json_data)
     url = settings.APIURL['TRIPJACK_FL_SEARCHALL_URL']
     SearchData['SearchTraceId'] = TraceId
-
     payload = json.dumps(SearchData)
     print(payload)
     headers = {
